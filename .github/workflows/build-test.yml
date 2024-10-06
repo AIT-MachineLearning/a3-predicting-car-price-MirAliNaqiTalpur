@@ -43,6 +43,11 @@ jobs:
       # Start the Docker containers
       - name: Compose up
         run: docker compose -f docker-compose.yaml up -d
+      
+      # Wait for the app to be ready (optional)
+      - name: Wait for the app to start
+        run: |
+          sleep 5  # Wait for a few seconds to ensure the app is running
 
       # Execute tests using pytest
       - name: Testing
