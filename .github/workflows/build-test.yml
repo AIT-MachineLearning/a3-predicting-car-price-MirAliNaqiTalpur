@@ -96,6 +96,6 @@ jobs:
           proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}
           script: |
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml down
-            tag=${{ github.ref_name }} docker image rm  mirali818/mirali-st125001-mla2 --force
+            tag=${{ github.ref_name }} docker image rm  mirali818/mirali-st125001-mla2:latest --force
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml up -d
   
