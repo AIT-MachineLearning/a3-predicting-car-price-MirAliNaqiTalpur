@@ -3,7 +3,7 @@ services:
     # This is for that asking the container to execute the main.py
     command: python3 code/app.py
     # The image I upload to my docker hub
-    image: mirali818/mirali-st125001-mla2:${tag}
+    image: mirali818/mirali-st125001-mla2:latest
     platform: linux/x86_64
     # This will ask DASH to run on 0.0.0.0 and port 80
     environment:
