@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model A2 - Linear Regression</title> <!-- Updated title -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+        }
+        .card {
+            border-radius: 15px; /* Rounded corners for card */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+        .card-title {
+            font-weight: bold; /* Bold title for emphasis */
+            color: #007bff; /* Primary color for title */
+        }
+        .main-title {
+            text-align: center; /* Center align main title */
+            margin-bottom: 30px; /* Spacing below title */
+            font-size: 2em; /* Increased font size for main title */
+            color: #343a40; /* Darker color for contrast */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Primary button color */
+            border-color: #007bff; /* Border color for button */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+            border-color: #0056b3; /* Darker border on hover */
+        }
+        #result {
+            font-size: 1.5em; /* Larger font for result display */
+            font-weight: bold; /* Bold result for emphasis */
+            color: #28a745; /* Success color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="main-title">Model A2 - Linear Regression</h1> <!-- Main title added -->
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Car Prices Estimator</h2>
+                <form id="form_a2">
+                    <div class="form-group">
+                        <label for="engine">Engine (cc)</label>
+                        <input type="number" class="form-control" id="engine" name="engine" placeholder="Enter engine capacity in cc" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <input type="number" min="1886" max="2024" class="form-control" id="year" name="year" placeholder="Enter year of manufacture" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="max_power">Max Power (Horsepower)</label>
+                        <input type="number" class="form-control" id="max_power" name="max_power" placeholder="Enter max power (Horsepower)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mileage">Mileage (Km/l)</label>
+                        <input type="number" step="0.1" class="form-control" id="mileage" name="mileage" placeholder="Enter mileage (Km/l)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="owner">Number of Previous Owners</label>
+                        <input type="number" min="0" class="form-control" id="owner" name="owner" placeholder="Enter number of previous owners" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </form>
+                <div id="result" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('form_a2').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                // Ensure that all values are numbers
+                if (!isNaN(value) && value.trim() !== '') {
+                    data[key] = Number(value);
+                } else {
+                    alert(`Please enter a valid number for ${key}.`);
+                    return;
+                }
+            });
+            
+            fetch('/predict_a2', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('result').innerText = 'Error: ' + result.error;
+                } else {
+                    const formattedPrice = Math.round(result.predicted_price).toLocaleString(); // Round and format the price with commas
+                    document.getElementById('result').innerText = 'Predicted Price: $' + formattedPrice; // Add dollar sign for clarity
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

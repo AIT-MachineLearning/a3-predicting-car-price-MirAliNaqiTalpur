@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model A1 - Random Forests</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">    
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+        }
+        .card {
+            border-radius: 15px; /* Rounded corners for card */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            border: none; /* Remove default border */
+        }
+        .card-title {
+            font-weight: bold; /* Bold title for emphasis */
+            color: #007bff; /* Primary color for title */
+        }
+        .main-title {
+            text-align: center; /* Center align main title */
+            margin-bottom: 30px; /* Spacing below title */
+            font-size: 2em; /* Increased font size for main title */
+            color: #343a40; /* Darker color for contrast */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Primary button color */
+            border-color: #007bff; /* Border color for button */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+            border-color: #0056b3; /* Darker border on hover */
+        }
+        .btn-secondary {
+            background-color: #6c757d; /* Secondary button color */
+            border-color: #6c757d; /* Border color for button */
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Darker shade on hover */
+            border-color: #545b62; /* Darker border on hover */
+        }
+        #result {
+            font-size: 1.5em; /* Larger font for result display */
+            font-weight: bold; /* Bold result for emphasis */
+            color: #28a745; /* Success color */
+            margin-top: 20px; /* Spacing above result */
+        }
+        .note {
+            color: #6c757d; /* Muted text color for note */
+            font-size: 0.9em; /* Slightly smaller font for note */
+            margin-bottom: 20px; /* Spacing below note */
+            text-align: center; /* Center align the note */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="main-title">Model A1 - Random Forests</h1>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Car Prices Estimator</h2>
+                <p class="note">Note: This model can handle missing values due to the use of an imputer.</p> <!-- Note about handling missing values -->
+                <form id="form_a1">
+                    <div class="form-group">
+                        <label for="engine">Engine (cc)</label>
+                        <input type="number" class="form-control" id="engine" name="engine" placeholder="Enter engine capacity in cc">
+                    </div>
+                    <div class="form-group">
+                        <label for="max_power">Max Power (Horsepower)</label>
+                        <input type="number" class="form-control" id="max_power" name="max_power" placeholder="Enter max power (Horsepower)">
+                    </div>
+                    <div class="form-group">
+                        <label for="mileage">Mileage (Km/l)</label>
+                        <input type="number" step="0.1" class="form-control" id="mileage" name="mileage" placeholder="Enter mileage (Km/l)">
+                    </div>
+                    <div class="form-group">
+                        <label for="owner">Number of Previous Owners</label>
+                        <input type="number" min="0" class="form-control" id="owner" name="owner" placeholder="Enter number of previous owners">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> <!-- Full-width button -->
+                </form>
+                <div id="result"></div> <!-- Result will be displayed here -->
+                <button onclick="window.location.href='/'" class="btn btn-secondary btn-lg btn-block mt-4">Go Back to Main Page</button> <!-- Button to go back -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('form_a1').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+
+            formData.forEach((value, key) => {
+                // Allow empty fields and treat them as null
+                data[key] = value.trim() === '' ? null : Number(value); // Set empty fields to null
+            });
+
+            // Proceed with submission regardless of empty fields
+            fetch('/predict_a1', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('result').innerText = 'Error: ' + result.error;
+                } else {
+                    const formattedPrice = Math.round(result.predicted_price).toLocaleString(); // Round and format the price with commas
+                    document.getElementById('result').innerText = 'Predicted Price: $' + formattedPrice; // Add dollar sign for clarity
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

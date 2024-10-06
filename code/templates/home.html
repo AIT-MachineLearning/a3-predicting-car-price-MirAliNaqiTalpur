@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-weight: 600;
+            font-size: 32px;
+            color: #007bff;
+        }
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+        .card {
+            border: none;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .model-info {
+            margin-bottom: 20px;
+        }
+        .btn {
+            font-size: 18px;
+            padding: 15px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Car Price Prediction</h1>
+            <p>Choose one of the models below to predict car prices or classify cars based on different algorithms.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="model-info">
+                    <h4>Model A1 - Random Forests</h4>
+                    <p>Predict car prices using a sophisticated Random Forests algorithm, which offers high accuracy by building multiple decision trees.</p>
+                    <a href="/model_a1" class="btn btn-primary">Try Model A1</a>
+                </div>
+                <div class="model-info">
+                    <h4>Model A2 - Linear Regression</h4>
+                    <p>Predict car prices using a Linear Regression model, a simpler and interpretable method for identifying linear relationships in the data.</p>
+                    <a href="/model_a2" class="btn btn-secondary">Try Model A2</a>
+                </div>
+                <div class="model-info">
+                    <h4>Model A3 - Logistic Regression</h4>
+                    <p>Classify cars into different categories (e.g., budget, premium) using a Logistic Regression model, best suited for predicting binary or categorical outcomes.</p>
+                    <a href="/model_a3" class="btn btn-success">Try Model A3</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Car Price Prediction Tool</p>
+        </div>
+    </div>
+
+</body>
+</html>

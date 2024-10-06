@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Classification - Logistic Regression</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            color: #28a745;
+        }
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .btn {
+            font-size: 18px;
+            padding: 15px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+        .result {
+            margin-top: 30px;
+            text-align: center;
+            background-color: #e9f7ef;
+            padding: 20px;
+            border-radius: 10px;
+            color: #28a745;
+            font-size: 18px;
+            display: none; /* Initially hidden */
+        }
+        .price-table {
+            margin-top: 40px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .price-table th, .price-table td {
+            border: 1px solid #ced4da;
+            padding: 10px;
+            text-align: center;
+        }
+        .price-table th {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Car Classification - Logistic Regression</h1>
+            <p>Enter the car details below to classify it into a specific category</p>
+        </div>
+
+        <form id="car-classification-form">
+            <div class="form-group">
+                <label for="regression_type">Choose Regression Type</label>
+                <select id="regression_type" name="regression_type" required>
+                    <option value="" disabled selected>Select Regression Type</option>
+                    <option value="normal">Normal Regression</option>
+                    <option value="ridge">Ridge Regression</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="year">Year of Manufacture</label>
+                <input type="number" id="year" name="year" placeholder="Enter year of manufacture" min="1900" max="2024" required>
+            </div>
+            <div class="form-group">
+                <label for="engine">Engine Size (cc)</label>
+                <input type="number" id="engine" name="engine" placeholder="Enter engine size in cc" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="max_power">Max Power (bhp)</label>
+                <input type="number" id="max_power" name="max_power" placeholder="Enter max power in bhp" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="mileage">Mileage (kmpl)</label>
+                <input type="number" id="mileage" name="mileage" placeholder="Enter mileage in kmpl" step="0.1" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="owner">Number of Previous Owners</label>
+                <input type="number" id="owner" name="owner" placeholder="Enter number of Previous owners" min="0" required>
+            </div>
+            <button type="submit" class="btn btn-success">Classify Car</button>
+        </form>
+
+        <div class="result">
+            <h3>Car Classification Result:</h3>
+            
+            <p id="classification-result"></p>
+        </div>
+
+        <h4 class="text-center">Price Range Guide</h4>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th>Price Range</th>
+                    <th>Description</th>
+                    <th>Predicted Class</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>30,000 - 150,000</td>
+                    <td>Economy Cars</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>150,001 - 300,000</td>
+                    <td>Low-budget Cars</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>300,001 - 600,000</td>
+                    <td>Mid-range Cars</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>600,001 - 10,000,000</td>
+                    <td>High-end Cars</td>
+                    <td>3</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>&copy; 2024 Car Price Prediction Tool</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#car-classification-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            const formData = {
+                regression_type: document.getElementById('regression_type').value, // Get selected regression type
+                year: document.getElementById('year').value,
+                engine: document.getElementById('engine').value,
+                max_power: document.getElementById('max_power').value,
+                mileage: document.getElementById('mileage').value,
+                owner: document.getElementById('owner').value
+            };
+
+            fetch('/predict_a3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.querySelector('.result');
+                if (data.predicted_class !== undefined) { // Check if predicted_class is defined
+                    const classMapping = {
+                        0: "Economy Car",
+                        1: "Low-budget Car",
+                        2: "Mid-range Car",
+                        3: "High-end Car"
+                    };
+
+                    const predictedClass = data.predicted_class;
+                    const carCategory = classMapping[predictedClass] || "Unknown Category"; // Fallback
+
+                    resultDiv.style.display = 'block'; // Show result div
+                    document.getElementById('classification-result').innerText = 
+                        `Predicted Class: ${predictedClass} - Category: ${carCategory}`; // Set prediction text
+                } else {
+                    console.error(data.error);
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>
