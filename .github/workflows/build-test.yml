@@ -47,7 +47,7 @@ jobs:
       # Wait for the app to be ready (optional)
       - name: Wait for the app to start
         run: |
-          sleep 5  # Wait for a few seconds to ensure the app is running
+          sleep 20  # Wait for a few seconds to ensure the app is running
 
       # Execute tests using pytest
       - name: Testing
