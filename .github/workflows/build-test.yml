@@ -32,6 +32,11 @@ jobs:
       #     fail_on_empty: true
       #     sort_keys: true
       
+
+       # Set Image Tag
+      - name: Set Image Tag
+       run: echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+
       # Create Docker Network if it doesn't exist
       - name: Create Docker Network
         run: docker network create traefik_default || true
@@ -47,6 +52,7 @@ jobs:
       # Execute tests using pytest
       - name: Testing
         run: docker compose -f docker-compose.yaml exec app pytest code/test_app.py
+        
 
       # If the testing pass, upload the image
       - name: Login to Docker Hub
@@ -60,7 +66,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:          
-          images: "mirali818/mirali-st125001-mla2:${TAG}"
+          images: "mirali818/mirali-st125001-mla2:${TAG}"                
           tags: |
             type=schedule
             type=ref, event=branch
@@ -78,7 +84,8 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}, "mirali818/mirali-st125001-mla2:${TAG}"
+          tags: ${{ steps.meta.outputs.tags }}, "mirali818/mirali-st125001-mla2:${{ env.TAG }}
+          
   # Deployment job
   deploy:
     environment: Production
@@ -96,6 +103,6 @@ jobs:
           proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}
           script: |
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml down
-            tag=${{ github.ref_name }} docker image rm  "mirali818/mirali-st125001-mla2:${TAG}"} --force
+            tag=${{ github.ref_name }} docker image rm "mirali818/mirali-st125001-mla2:${tag}" --force
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml up -d
   
