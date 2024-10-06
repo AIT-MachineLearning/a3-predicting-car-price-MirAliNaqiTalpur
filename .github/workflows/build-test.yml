@@ -31,7 +31,6 @@ jobs:
       #     file_name: .env
       #     fail_on_empty: true
       #     sort_keys: true     
-
        
       # Create Docker Network if it doesn't exist
       - name: Create Docker Network
@@ -98,7 +97,11 @@ jobs:
           proxy_username: ${{ secrets.USERNAME }}
           proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}
           script: |
-            tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml down            
-            tag=${{ github.ref_name }} docker image rm  mirali818/mirali-st125001-mla2:${tag} --force
-            tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml up -d
+            tag=${{ github.ref_name }}
+            docker compose -f st125001/docker-compose.yaml down            
+            docker image rm  mirali818/mirali-st125001-mla2:${tag} --force
+            docker compose -f st125001/docker-compose.yaml up -d
+      # Debug the tag value after the SSH step
+      - name: Debug Tag Value
+        run: echo "Tag is ${{ github.ref_name }}"
   
