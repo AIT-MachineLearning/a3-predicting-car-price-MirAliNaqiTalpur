@@ -35,7 +35,7 @@ jobs:
 
        # Set Image Tag
       - name: Set Image Tag
-       run: echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+        run: echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
 
       # Create Docker Network if it doesn't exist
       - name: Create Docker Network
