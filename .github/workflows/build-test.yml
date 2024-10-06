@@ -101,7 +101,3 @@ jobs:
             docker compose -f st125001/docker-compose.yaml down            
             docker image rm  mirali818/mirali-st125001-mla2 --force
             docker compose -f st125001/docker-compose.yaml up -d
-      # Debug the tag value after the SSH step
-      - name: Debug Tag Value
-        run: echo "Tag is ${{ github.ref_name }}"
-  
