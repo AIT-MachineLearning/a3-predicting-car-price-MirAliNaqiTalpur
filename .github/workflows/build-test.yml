@@ -60,7 +60,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:          
-          images: mirali818/mirali-st125001-mla2
+          images: mirali818/mirali-st125001-mla2:latest
           tags: |
             type=schedule
             type=ref, event=branch
