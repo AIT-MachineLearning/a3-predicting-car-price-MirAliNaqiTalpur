@@ -61,7 +61,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:          
-          images: mirali818/mirali-st125001-mla2:${tag}    
+          images: mirali818/mirali-st125001-mla2:${tag:-latest}
           tags: |
             type=schedule
             type=ref, event=branch
@@ -79,7 +79,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}, mirali818/mirali-st125001-mla2:${tag}
+          tags: ${{ steps.meta.outputs.tags }}, mirali818/mirali-st125001-mla2:${tag:-latest}
           
   # Deployment job
   deploy:
@@ -99,7 +99,7 @@ jobs:
           script: |
             tag=${{ github.ref_name }}
             docker compose -f st125001/docker-compose.yaml down            
-            docker image rm  mirali818/mirali-st125001-mla2:${tag} --force
+            docker image rm  mirali818/mirali-st125001-mla2:${tag:-latest} --force
             docker compose -f st125001/docker-compose.yaml up -d
       # Debug the tag value after the SSH step
       - name: Debug Tag Value
