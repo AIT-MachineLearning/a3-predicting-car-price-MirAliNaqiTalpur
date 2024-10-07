@@ -20,14 +20,16 @@ model_name_ridge = "st125001-a3-ridge"
 model_version = 1  
 
 # Load the model from MLflow
-model_a3_normal = mlflow.pyfunc.load_model(f"models:/{model_name_normal}/{model_version}")
-model_a3_ridge = mlflow.pyfunc.load_model(f"models:/{model_name_ridge}/{model_version}")
+# model_a3_normal = mlflow.pyfunc.load_model(f"models:/{model_name_normal}/{model_version}")
+# model_a3_ridge = mlflow.pyfunc.load_model(f"models:/{model_name_ridge}/{model_version}")
 
 app = Flask(__name__)
 
 # Load the models and imputers
 model_a1 = joblib.load('models/car_price_model.pkl')  # Model A1
 model_a2 = joblib.load('models/car_prices_prediction_a2.pkl')  # Model A2
+model_a3_normal = joblib.load('models/model_a3_normal.pkl')  # Model A3
+model_a3_ridge = joblib.load('models/model_a3_ridge.pkl')  # Model A3
 imputer_a1 = joblib.load('models/imputer.pkl')  # Imputer for Model A1
 scaler = joblib.load('models/scaler.pkl')
 scaler_a3 = joblib.load('models/scaler_a3.pkl')
@@ -134,17 +136,19 @@ def predict_a3():
         # Add the 'owner' feature back to the DataFrame
         features_scaled_df['owner'] = features_df['owner'].values  # Re-add 'owner' to the DataFrame
         
+        features_numpy = features_scaled_df.to_numpy()
+        
         #Determine which model to use based on input
         regression_type = input_data.get('regression_type')
         if regression_type == 'normal':
-            pred_class = model_a3_normal.predict(features_scaled_df)
+            pred_class = model_a3_normal.predict(features_numpy)
         elif regression_type == 'ridge':
-            pred_class = model_a3_ridge.predict(features_scaled_df)
+            pred_class = model_a3_ridge.predict(features_numpy)
         else:
             return jsonify({'error': 'Invalid model type specified. Use "normal" or "ridge".'}), 400
 
         # Make predictions using the MLflow-registered model
-        pred_class = model_a3_normal.predict(features_scaled_df)        
+        pred_class = model_a3_normal.predict(features_numpy)        
         
         # Prepare the response
         return jsonify({'predicted_class': int(pred_class[0])})    

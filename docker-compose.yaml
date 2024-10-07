@@ -1,6 +1,5 @@
 services:
-  dash:
-    # This is for that asking the container to execute the main.py
+  dash:    
     command: python3 code/app.py
     # The image I upload to my docker hub
     image: mirali818/mirali-st125001-mla2:latest
@@ -8,7 +7,7 @@ services:
     # This will ask DASH to run on 0.0.0.0 and port 80
     environment:
       - HOST=0.0.0.0
-      - PORT=80:5000
+      - PORT=5000:80
     # This is important for asking Traefik to use your container.
     labels:      
       - traefik.enable=true      
@@ -16,14 +15,10 @@ services:
       - traefik.http.routers.web-st125001.rule=Host(`st125001.ml.brain.cs.ait.ac.th`)      
       - traefik.http.routers.web-st125001.tls=true
       - traefik.http.routers.web-st125001.tls.certresolver=production
-      - traefik.http.routers.web-st125001.entrypoints=websecure    
-    
+      - traefik.http.routers.web-st125001.entrypoints=websecure        
     networks:
       - default
       - traefik_default
 
-# Keep it like this too.
-networks:
-  default:
-  traefik_default:
-    external: true
+volumes:
+  vscode-server:
