@@ -6,8 +6,8 @@ run-name: ${{ github.actor }} Building and Testing
 # Trigger the workflow on tag pushes
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 jobs:
   # Job for building and testing
   build-test:
@@ -96,9 +96,8 @@ jobs:
           proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }} 
           proxy_passphrase: ${{ secrets.PASSPHRASE  }}                   
           script: |
-            docker pull mirali818/ml_125001_fnal:latest
+            docker pull mirali818/ml_125001_final:latest
             # docker compose -f st125001/docker-compose.yaml down  --remove-orphans                     
             # docker compose -f st125001/docker-compose.yaml up -d
-
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml down
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml up -d
