@@ -1,7 +1,7 @@
 services:
   flask: 
     build:
-      context: 
+      context: .
       dockerfile: Dockerfile
     volumes:
       - ./code:/code   
