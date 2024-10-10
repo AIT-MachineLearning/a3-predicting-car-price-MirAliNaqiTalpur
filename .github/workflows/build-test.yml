@@ -43,8 +43,7 @@ jobs:
       - name: Push Docker image to DockerHub
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/ml_125001_final:latest
   # Deployment job
-  deploy:
-    environment: Production
+  deploy:    
     needs: build
     runs-on: ubuntu-latest
     steps:
