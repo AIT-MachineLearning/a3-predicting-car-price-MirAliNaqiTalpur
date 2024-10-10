@@ -1,6 +1,11 @@
 import unittest
 import json
 from app import app  # Import your Flask app
+import warnings
+
+# Ignore specific deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class TestPredictA3(unittest.TestCase):
     def setUp(self):
