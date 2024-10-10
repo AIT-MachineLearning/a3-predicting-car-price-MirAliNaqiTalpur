@@ -9,7 +9,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M 
+          memory: 1G 
     expose:
       - 5000 
     container_name: ml_125001_final    
