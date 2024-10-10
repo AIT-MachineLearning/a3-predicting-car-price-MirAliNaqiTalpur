@@ -5,17 +5,17 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./code:/root/code   
-    image: mirali818/ml_125001_final
+    image: mirali818/ml_125001_final:latest
     expose:
       - 5000 
     container_name: ml_125001_final    
     labels:      
       - traefik.enable=true      
-      - traefik.http.services.flask-st125001.loadbalancer.server.port=5000      
-      - traefik.http.routers.flask-st125001.rule=Host(`st125001.ml.brain.cs.ait.ac.th`)      
-      - traefik.http.routers.flask-st125001.tls=true
-      - traefik.http.routers.flask-st125001.tls.certresolver=production
-      - traefik.http.routers.flask-st125001.entrypoints=websecure        
+      - traefik.http.services.flask-st125001-st125001.loadbalancer.server.port=5000      
+      - traefik.http.routers.flask-st125001-st125001.rule=Host(`st125001.ml.brain.cs.ait.ac.th`)      
+      - traefik.http.routers.flask-st125001-st125001.tls=true
+      - traefik.http.routers.flask-st125001-st125001.tls.certresolver=production
+      - traefik.http.routers.flask-st125001-st125001.entrypoints=websecure        
     networks:
       - default
       - traefik_default
