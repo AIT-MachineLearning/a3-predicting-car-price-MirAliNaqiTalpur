@@ -1,37 +1,54 @@
+# test_app.py
 import unittest
 import json
-from app import app  # Import your Flask app
+from app import app  # Adjust the import based on your app's structure
 
-class TestPredictA3(unittest.TestCase):
+class PredictA3TestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
 
-    def test_predict_a3(self):
-        # Minimal input data that conforms to the expected format for Model A3
+    def test_predict_a3_normal(self):
         input_data = {
             'year': 2020,
             'engine': 1.5,
-            'max_power': 150,
-            'mileage': 15.5,
-            'owner': 0,
-            'regression_type': 'normal'  # Change to 'ridge' to test that case
+            'max_power': 120.0,
+            'mileage': 15.0,
+            'owner': 1,
+            'regression_type': 'normal'
         }
-
-        # Send POST request to the predict_a3 endpoint
-        response = self.app.post('/predict_a3',
-                                 data=json.dumps(input_data),
-                                 content_type='application/json')
-
-        # Check if the status code is 200 OK
+        response = self.app.post('/predict_a3', json=input_data)
         self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('predicted_class', data)
 
-        # Verify the response contains the 'predicted_class' field
-        response_data = response.get_json()
-        self.assertIn('predicted_class', response_data)
+    def test_predict_a3_ridge(self):
+        input_data = {
+            'year': 2020,
+            'engine': 1.5,
+            'max_power': 120.0,
+            'mileage': 15.0,
+            'owner': 1,
+            'regression_type': 'ridge'
+        }
+        response = self.app.post('/predict_a3', json=input_data)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('predicted_class', data)
 
-        # Optional: Check if the predicted_class is an integer
-        self.assertIsInstance(response_data['predicted_class'], int)
+    def test_predict_a3_invalid_model(self):
+        input_data = {
+            'year': 2020,
+            'engine': 1.5,
+            'max_power': 120.0,
+            'mileage': 15.0,
+            'owner': 1,
+            'regression_type': 'invalid_model'
+        }
+        response = self.app.post('/predict_a3', json=input_data)
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertIn('error', data)
 
 if __name__ == '__main__':
     unittest.main()
