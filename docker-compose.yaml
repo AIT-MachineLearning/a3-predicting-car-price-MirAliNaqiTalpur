@@ -20,6 +20,6 @@ services:
       - default
       - traefik_default
 networks:
-  defaults:
+  default:
     traefik_default:
       external: true
