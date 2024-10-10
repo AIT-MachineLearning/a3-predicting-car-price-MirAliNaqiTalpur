@@ -2,9 +2,7 @@ services:
   flask: 
     build:
       context: "."
-      dockerfile: Dockerfile
-    volumes:
-      - ./code:/root/code   
+      dockerfile: Dockerfile       
     image: mirali818/ml_125001_final:latest
     expose:
       - 5000 
