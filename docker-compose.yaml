@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./code:/code   
-    image: mirali818/ml_125001_final:latest
+    image: mirali818/ml_125001_final
     expose:
       - 5000 
     container_name: ml_125001_final    
