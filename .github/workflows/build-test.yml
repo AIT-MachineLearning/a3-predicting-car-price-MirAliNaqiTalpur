@@ -57,7 +57,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:          
-          images: mirali818/mirali-st125001-mla2
+          images: mirali818/ml_125001_final
           tags: |
             type=schedule
             type=ref, event=branch
@@ -75,7 +75,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}, mirali818/mirali-st125001-mla2:latest
+          tags: ${{ steps.meta.outputs.tags }}, mirali818/ml_125001_final:latest
           
   # Deployment job
   deploy:
@@ -95,5 +95,5 @@ jobs:
           script: |
             tag=${{ github.ref_name }}
             docker compose -f st125001/docker-compose.yaml down            
-            docker image rm  mirali818/mirali-st125001-mla2 --force
+            docker image rm mirali818/ml_125001_final --force
             docker compose -f st125001/docker-compose.yaml up -d
