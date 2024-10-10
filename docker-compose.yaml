@@ -6,10 +6,6 @@ services:
     volumes:
       - ./code:/code   
     image: mirali818/ml_125001_final
-    deploy:
-      resources:
-        limits:
-          memory: 1G 
     expose:
       - 5000 
     container_name: ml_125001_final    
