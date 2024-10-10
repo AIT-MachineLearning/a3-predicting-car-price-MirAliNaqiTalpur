@@ -112,6 +112,7 @@ def predict_a2():
 @app.route('/predict_a3', methods=['POST'])
 def predict_a3():
     input_data = request.get_json()
+    print(f"Received input data for A3: {input_data}")
 
     # Prepare data for prediction (adjust according to your model input features)
     data = {
@@ -122,39 +123,40 @@ def predict_a3():
         'owner': [int(input_data.get('owner'))],
         'regression_type': input_data.get('regression_type')
     }
-
+    
+    # Debugging the features being passed
+    print(f"Prepared features: {data}")    
+    
     features_df = pd.DataFrame(data)
-    features_to_scale = features_df[['year', 'engine', 'max_power', 'mileage']]   
+    features_to_scale = features_df[['year', 'engine', 'max_power', 'mileage', 'owner']]   
       
     try:
         # Scale only the relevant features
         features_scaled = scaler_a3.transform(features_to_scale)  
+        print(f"Scaled features: {features_scaled}")
 
         # Create a new DataFrame for scaled features
-        features_scaled_df = pd.DataFrame(features_scaled, columns=['year', 'engine', 'max_power', 'mileage'])
+        features_scaled_df = pd.DataFrame(features_scaled, columns=['year', 'engine', 'max_power', 'mileage', 'owner'])
         
         # Add the 'owner' feature back to the DataFrame
-        features_scaled_df['owner'] = features_df['owner'].values  # Re-add 'owner' to the DataFrame
+        # features_scaled_df['owner'] = features_df['owner'].values  # Re-add 'owner' to the DataFrame
         
-        features_numpy = features_scaled_df.to_numpy()
+        # features_numpy = features_scaled_df.to_numpy()
         
         #Determine which model to use based on input
         regression_type = input_data.get('regression_type')
         if regression_type == 'normal':
-            pred_class = model_a3_normal.predict(features_numpy)
+            pred_class = model_a3_normal.predict(features_scaled_df)
         elif regression_type == 'ridge':
-            pred_class = model_a3_ridge.predict(features_numpy)
+            pred_class = model_a3_ridge.predict(features_scaled_df)
         else:
-            return jsonify({'error': 'Invalid model type specified. Use "normal" or "ridge".'}), 400
-
-        # Make predictions using the MLflow-registered model
-        pred_class = model_a3_normal.predict(features_numpy)        
+            return jsonify({'error': 'Invalid model type specified. Use "normal" or "ridge".'}), 400               
         
         # Prepare the response
         return jsonify({'predicted_class': int(pred_class[0])})    
     except Exception as e:
-        return jsonify({'error': str(e)})
-    
+        print(f"Error during prediction: {e}")  # Log the error
+        return jsonify({'error': str(e)}), 500
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

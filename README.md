@@ -14,4 +14,3 @@ Have fun.
 
 I follow multipage with this https://dash.plotly.com/urls
 
-sjsdlkjfslkdf

@@ -1,14 +1,14 @@
 services:
   flask: 
     build:
+      context: 
+      dockerfile: Dockerfile
     volumes:
       - ./code:/code   
-    image: mirali818/mirali-st125001-mla2:latest
+    image: mirali818/ml_125001_final:latest
     expose:
       - 5000 
-    container_name: mirali-st125001-mla2
-    # command: python /code/app.py
-    # This is important for asking Traefik to use your container.
+    container_name: ml_125001_final    
     labels:      
       - traefik.enable=true      
       - traefik.http.services.flask-st125001.loadbalancer.server.port=5000      
@@ -19,7 +19,6 @@ services:
     networks:
       - default
       - traefik_default
-
 networks:
   defaults:
     traefik_default:
