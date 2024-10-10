@@ -101,3 +101,6 @@ jobs:
             # docker compose -f st125001/docker-compose.yaml up -d
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml down
             tag=${{ github.ref_name }} docker compose -f st125001/docker-compose.yaml up -d
+
+
+            #end of script
