@@ -8,7 +8,6 @@ on:
   push:
     tags:
       - 'v*'
-
 jobs:
   # Job for building and testing
   build-test:
@@ -43,7 +42,7 @@ jobs:
       
       # Execute tests using pytest
       - name: Testing
-        run: docker compose -f docker-compose.yaml exec flask pytest --timeout=60 /code/test_app.py       
+        run: docker compose -f docker-compose.yaml exec flask pytest /code/test_app.py --tb=short     
 
       # If the testing pass, upload the image
       - name: Login to Docker Hub
