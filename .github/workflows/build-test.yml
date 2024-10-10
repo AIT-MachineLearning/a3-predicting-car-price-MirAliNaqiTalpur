@@ -87,9 +87,12 @@ jobs:
         with:
           host: ${{ secrets.MLBRAIN_HOST }}
           username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           proxy_host: ${{ secrets.BAZOOKA_HOST }}
           proxy_username: ${{ secrets.USERNAME }}
+          proxy_password: ${{ secrets.PASSWORD }}
           proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }} 
           proxy_passphrase: ${{ secrets.PASSPHRASE  }}                   
           script: |
