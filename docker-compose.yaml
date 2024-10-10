@@ -4,7 +4,7 @@ services:
       context: "."
       dockerfile: Dockerfile
     volumes:
-      - ./code:/code   
+      - ./code:/root/code   
     image: mirali818/ml_125001_final
     expose:
       - 5000 
