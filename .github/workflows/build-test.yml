@@ -97,6 +97,6 @@ jobs:
           proxy_passphrase: ${{ secrets.PASSPHRASE  }}                   
           script: |
             tag=${{ github.ref_name }}
-            docker compose -f st125001/docker-compose.yaml down            
-            docker image rm mirali818/ml_125001_final --force
+            docker pull mirali818/ml_125001_final:latest
+            docker compose -f st125001/docker-compose.yaml down  --remove-orphans                     
             docker compose -f st125001/docker-compose.yaml up -d
