@@ -43,7 +43,7 @@ jobs:
       
       # Execute tests using pytest
       - name: Testing
-        run: docker compose -f docker-compose.yaml exec flask pytest code/test_app.py        
+        run: docker compose -f docker-compose.yaml exec flask pytest /code/test_app.py       
 
       # If the testing pass, upload the image
       - name: Login to Docker Hub
