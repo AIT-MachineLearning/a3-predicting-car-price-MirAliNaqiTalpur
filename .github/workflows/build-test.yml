@@ -90,8 +90,8 @@ jobs:
           key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}
           proxy_host: ${{ secrets.BAZOOKA_HOST }}
           proxy_username: ${{ secrets.USERNAME }}
-          proxy_passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }}          
+          proxy_key: ${{ secrets.MLBRAIN_SSH_PRIVATE }} 
+          passphrase: ${{ secrets.PASSPHRASE  }}                   
           script: |
             tag=${{ github.ref_name }}
             docker compose -f st125001/docker-compose.yaml down            
