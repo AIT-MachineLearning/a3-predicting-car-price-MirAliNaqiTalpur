@@ -45,7 +45,7 @@ jobs:
   # Deployment job
   deploy:
     environment: Production
-    # needs: build-test
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: SSH Remote Commands
