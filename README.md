@@ -1,16 +1,20 @@
-# Dash Plotly
+# Car Price Prediction Flask App
 
-To run this folder, you will need `Docker`, then just run this with
+A Flask web application that provides car price predictions using multiple machine learning models. Users can input car features and receive predicted prices based on different regression models.
 
-```sh
-docker compose up --build
-```
 
-Access the app with http://localhost:9001
+## Features
 
-Have fun.
+- Predict car prices using different models:
+  - Model A1: Basic prediction model.
+  - Model A2: Enhanced prediction model with scaling.
+  - Model A3: Advanced prediction model using ridge regression.
+- User-friendly interface for inputting car features.
+- Supports different types of regression for predictions.
 
-## Side bar
+## Installation
 
-I follow multipage with this https://dash.plotly.com/urls
-
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/car-price-prediction.git
+   cd car-price-prediction
